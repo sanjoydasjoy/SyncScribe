@@ -2,14 +2,14 @@ import React, { createContext, useContext, useState } from 'react'
 
 const authContext = createContext()
 
-const ContextProvider = () => {
+const ContextProvider = ({children}) => {
     const [user, setUser] = useState(null)
     return (
         <authContext.Provider value={{ user }}>
-            ContextProvider
+            {children}
         </authContext.Provider>
 
     )
 }
-
+export const useAuth = () => useContext(authContext)
 export default ContextProvider
