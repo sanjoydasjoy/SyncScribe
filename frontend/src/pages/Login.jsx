@@ -1,19 +1,24 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/ContextProvider';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
+    const {login} = useAuth()
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+            const response = await axios.post(
+                'http://localhost:5000/api/auth/login', 
+                { email, password });
 
             if (response.data.success) {
+                login(response.data.user)
                 localStorage.setItem("token", response.data.token);
                 navigate('/'); // Navigate to the home page or dashboard after login
             } else {
