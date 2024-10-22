@@ -53,6 +53,26 @@ const Home = () => {
       console.log(error)
     }
   }
+  const deleteNote = async (id) => {
+
+    try {
+      const response = await axios.delete(
+        `http://localhost:5000/api/note/${id}`,
+        {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+      }
+      )
+
+      if (response.data.success) {
+        fetchNotes()
+      }
+    } catch (error) {
+      console.log(error)
+    }
+
+  }
 
   const updateNote = async (id, title, description) => {
     try {
@@ -99,6 +119,7 @@ const Home = () => {
         addNote={addNote}
         currentNote={currentNote}
         updateNote={updateNote}
+        deleteNote={deleteNote}
       />}
 
 
