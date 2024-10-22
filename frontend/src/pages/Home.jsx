@@ -8,9 +8,10 @@ const Home = () => {
 
   const [isModel, setIsModel] = useState(false)
   const [notes, setNotes] = useState([])
+  const [currentNote, setCurrentNote] = useState([])
 
   useEffect(() => {
-    
+
     fetchNotes()
   }, [])
 
@@ -27,10 +28,36 @@ const Home = () => {
     setIsModel(false)
   }
 
+  const editNote = (note) => {
+    setCurrentNote(note)
+    setIsModel(true)
+  }
+
   const addNote = async (title, description) => {
     try {
       const response = await axios.post(
         'http://localhost:5000/api/note/add',
+        { title, description }, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+      }
+      )
+
+      if (response.data.success) {
+        fetchNotes()
+        //navigate('/')
+        closeModel()
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const updateNote = async (id, title, description) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:5000/api/note/${id}`,
         { title, description }, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`
@@ -56,6 +83,7 @@ const Home = () => {
         {notes.map(note => (
           <NoteCard
             note={note}
+            editNote={editNote}
           />
         ))}
       </div>
@@ -69,6 +97,8 @@ const Home = () => {
       {isModel && <NoteModel
         closeModel={closeModel}
         addNote={addNote}
+        currentNote={currentNote}
+        updateNote={updateNote}
       />}
 
 
