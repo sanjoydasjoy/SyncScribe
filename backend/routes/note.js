@@ -38,4 +38,25 @@ noteRouter.get('/', async (req, res) => {
     }
 })
 
+noteRouter.put('/:id', async (req, res) => {
+    try {
+        const {id} = req.params
+        const updateNote = await Note.findByIdAndUpdate(id, req.body)
+        return res.status(200).json({ success: true, updateNote })
+    } catch (error) {
+        return res.status(500).json({ success: false, message: "cant update notes" })
+    }
+})
+
+noteRouter.delete('/:id', async (req, res) => {
+    try {
+        const {id} = req.params
+        const deleteNote = await Note.findByIdAndDelete(id)
+        return res.status(200).json({ success: true, deleteNote })
+    } catch (error) {
+        return res.status(500).json({ success: false, message: "cant delete notes" })
+    }
+})
+
+
 export default noteRouter;
