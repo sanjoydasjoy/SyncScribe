@@ -8,7 +8,7 @@ const Navbar = () => {
     return (
         <nav className="bg-gray-800 p-4 text-white flex justify-between items-center">
             <div className="text-x1 font-bold">
-                <Link to="/">NoteApp</Link>
+                <Link to="/">SyncScribe</Link>
             </div>
             <input
                 type="text"
