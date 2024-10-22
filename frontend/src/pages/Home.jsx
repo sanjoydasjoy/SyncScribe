@@ -104,6 +104,7 @@ const Home = () => {
           <NoteCard
             note={note}
             editNote={editNote}
+            deleteNote={deleteNote}
           />
         ))}
       </div>
@@ -119,7 +120,7 @@ const Home = () => {
         addNote={addNote}
         currentNote={currentNote}
         updateNote={updateNote}
-        deleteNote={deleteNote}
+        
       />}
 
 
