@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Navbar from '../components/Navbar'
 import NoteModel from '../components/NoteModel'
+import axios from 'axios'
 
 const Home = () => {
 
