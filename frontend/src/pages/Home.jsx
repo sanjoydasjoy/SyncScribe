@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar'
 import NoteModel from '../components/NoteModel'
 import axios from 'axios'
 import NoteCard from '../components/NoteCard'
+import { toast } from 'react-toastify'
 
 const Home = () => {
 
@@ -26,15 +27,18 @@ const Home = () => {
       )
     )
   }, [query, notes])
-
   const fetchNotes = async () => {
     try {
-      const { data } = await axios.get('http://localhost:5000/api/note')
-      setNotes(data.notes)
+      const { data } = await axios.get('http://localhost:5000/api/note', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+      });
+      setNotes(data.notes);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   const closeModel = () => {
     setIsModel(false)
@@ -78,7 +82,9 @@ const Home = () => {
       )
 
       if (response.data.success) {
+        toast.success("Note Deleted")
         fetchNotes()
+        
       }
     } catch (error) {
       console.log(error)
@@ -114,7 +120,7 @@ const Home = () => {
       />
 
       <div className='px-8 pt-4 grid grid-cols-1 md:grid-cols-3 gap-6'>
-        { filteredNotes.length > 0 ? filteredNotes.map((note) => (
+        {filteredNotes.length > 0 ? filteredNotes.map((note) => (
           <NoteCard
             note={note}
             editNote={editNote}
