@@ -8,7 +8,7 @@ const Home = () => {
 
   const [isModel, setIsModel] = useState(false)
   const [notes, setNotes] = useState([])
-  const [currentNote, setCurrentNote] = useState([])
+  const [currentNote, setCurrentNote] = useState(null)
 
   useEffect(() => {
 
@@ -110,7 +110,9 @@ const Home = () => {
       </div>
 
       <button
-        onClick={() => setIsModel(true)}
+        onClick={() => {
+          setCurrentNote(null) 
+          setIsModel(true)}}
         className='fixed right-6 bottom-6 text-white bg-gradient-to-r from-teal-500 to-blue-500 hover:from-teal-400 hover:to-blue-400 shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 font-bold p-4 rounded-full flex items-center justify-center'>
         <span className="text-4xl">+</span>
       </button>
