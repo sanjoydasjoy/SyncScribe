@@ -2,6 +2,7 @@ import express from 'express'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import User from '../models/User.js'
+import middleware from '../middleware/middleware.js';
 
 const authRouter = express.Router()
 
@@ -46,17 +47,21 @@ authRouter.post('/login', async (req, res) => {
 
         }
 
-        const token = jwt.sign({id:user._id}, process.env.jwt_secret, {expiresIn: "5h"})
+        const token = jwt.sign({ id: user._id }, process.env.jwt_secret, { expiresIn: "5h" })
 
         return res
-        .status(200)
-        .json({ success: true, token, user: {name:user.name}, message: "Login Successfull" })
+            .status(200)
+            .json({ success: true, token, user: { name: user.name }, message: "Login Successfull" })
 
     } catch (error) {
 
         return res.status(500).json({ success: false, message: "error in login" })
 
     }
+})
+
+authRouter.get('/verify', middleware, async (req, res) => {
+    return res.status(200).json({ success: true, user: req.user })
 })
 
 export default authRouter
