@@ -10,10 +10,22 @@ const Home = () => {
   const [notes, setNotes] = useState([])
   const [currentNote, setCurrentNote] = useState(null)
 
+  const [filteredNotes, setFilteredNotes] = useState(false)
+  const [query, setQuery] = useState('')
+
   useEffect(() => {
 
     fetchNotes()
   }, [])
+
+  useEffect(() => {
+    setFilteredNotes(
+      notes.filter((notes) =>
+        notes.title.toLowerCase().includes(query.toLowerCase()) ||
+        notes.description.toLowerCase().includes(query.toLowerCase())
+      )
+    )
+  }, [query, notes])
 
   const fetchNotes = async () => {
     try {
@@ -59,10 +71,10 @@ const Home = () => {
       const response = await axios.delete(
         `http://localhost:5000/api/note/${id}`,
         {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
         }
-      }
       )
 
       if (response.data.success) {
@@ -97,22 +109,26 @@ const Home = () => {
 
   return (
     <div className='bg-gray-100 min-h-screen'>
-      <Navbar />
+      <Navbar
+        setQuery={setQuery}
+      />
 
       <div className='px-8 pt-4 grid grid-cols-1 md:grid-cols-3 gap-6'>
-        {notes.map(note => (
+        { filteredNotes.length > 0 ? filteredNotes.map((note) => (
           <NoteCard
             note={note}
             editNote={editNote}
             deleteNote={deleteNote}
           />
-        ))}
+        )) : <p>No Notes</p>
+        }
       </div>
 
       <button
         onClick={() => {
-          setCurrentNote(null) 
-          setIsModel(true)}}
+          setCurrentNote(null)
+          setIsModel(true)
+        }}
         className='fixed right-6 bottom-6 text-white bg-gradient-to-r from-teal-500 to-blue-500 hover:from-teal-400 hover:to-blue-400 shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 font-bold p-4 rounded-full flex items-center justify-center'>
         <span className="text-4xl">+</span>
       </button>
@@ -122,7 +138,7 @@ const Home = () => {
         addNote={addNote}
         currentNote={currentNote}
         updateNote={updateNote}
-        
+
       />}
 
 
